@@ -1,0 +1,14 @@
+# People Counter — Python Dependencies
+# Install with: pip install -r requirements.txt
+#
+# NOTE: hailo_platform is pre-installed with the Hailo SDK on RPi5.
+#       Do NOT pip install it — it comes from the SDK.
+#
+# NOTE: torchreid must be installed from source (see setup.sh).
+
+numpy>=1.24.0
+opencv-python-headless>=4.8.0
+scipy>=1.11.0
+torch>=2.0.0
+torchvision>=0.15.0
+picamera2>=0.3.12
