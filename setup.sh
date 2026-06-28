@@ -94,7 +94,7 @@ else
 fi
 
 cd "${TORCHREID_DIR}"
-pip install -e . -q
+pip install --no-build-isolation -e . -q
 cd "${SCRIPT_DIR}"
 echo -e "${GREEN}  ✓ torchreid installed${NC}"
 
