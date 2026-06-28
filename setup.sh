@@ -45,7 +45,6 @@ sudo apt-get install -y -qq \
     python3-venv \
     python3-pip \
     libcamera-dev \
-    libatlas-base-dev \
     libopenblas-dev \
     libjpeg-dev \
     libpng-dev \
