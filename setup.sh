@@ -64,12 +64,24 @@ echo -e "${YELLOW}[2/7] Setting up Python virtual environment...${NC}"
 if [ -d "${VENV_DIR}" ]; then
     echo -e "  Virtual environment already exists at ${VENV_DIR}"
 else
-    python3 -m venv "${VENV_DIR}" --system-site-packages
+    # Create clean virtual environment without inheriting system packages to avoid conflicts
+    python3 -m venv "${VENV_DIR}"
     echo -e "  Created virtual environment at ${VENV_DIR}"
 fi
 
 # Activate venv
 source "${VENV_DIR}/bin/activate"
+
+# Get virtual environment site-packages directory
+VENV_SITE_PACKAGES=$(python3 -c "import site; print(site.getsitepackages()[0])")
+
+# Link system hailo_platform packages if they exist (to avoid using --system-site-packages)
+for p in /usr/lib/python3/dist-packages/*hailo*; do
+    if [ -e "$p" ]; then
+        ln -sf "$p" "${VENV_SITE_PACKAGES}/" 2>/dev/null || true
+    fi
+done
+
 pip install --upgrade pip setuptools wheel -q
 echo -e "${GREEN}  ✓ Virtual environment ready${NC}"
 
