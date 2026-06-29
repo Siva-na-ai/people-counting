@@ -62,7 +62,19 @@ echo -e "${GREEN}  ✓ System dependencies installed${NC}"
 # ─────────────────────────────────────────────────────────────────────────
 echo -e "${YELLOW}[2/7] Setting up Python virtual environment...${NC}"
 if [ -d "${VENV_DIR}" ]; then
-    echo -e "  Virtual environment already exists at ${VENV_DIR}"
+    # Check if the virtual environment Python version matches the system Python version
+    VENV_PYTHON_VERSION=$("${VENV_DIR}/bin/python" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')" 2>/dev/null || echo "none")
+    SYS_PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+    
+    if [ "${VENV_PYTHON_VERSION}" != "${SYS_PYTHON_VERSION}" ]; then
+        echo -e "${YELLOW}  ⚠ Python version mismatch (venv has Python ${VENV_PYTHON_VERSION}, but system has Python ${SYS_PYTHON_VERSION}).${NC}"
+        echo -e "  Recreating virtual environment to avoid package conflicts..."
+        rm -rf "${VENV_DIR}"
+        python3 -m venv "${VENV_DIR}"
+        echo -e "  Created fresh virtual environment at ${VENV_DIR}"
+    else
+        echo -e "  Virtual environment already exists at ${VENV_DIR}"
+    fi
 else
     # Create clean virtual environment without inheriting system packages to avoid conflicts
     python3 -m venv "${VENV_DIR}"
@@ -106,6 +118,8 @@ else
 fi
 
 cd "${TORCHREID_DIR}"
+# Clean any previous build/compile artifacts to prevent conflicts (e.g. from Python upgrades)
+git clean -fdx 2>/dev/null || true
 pip install --no-build-isolation -e . -q
 cd "${SCRIPT_DIR}"
 echo -e "${GREEN}  ✓ torchreid installed${NC}"
