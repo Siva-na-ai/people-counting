@@ -120,6 +120,8 @@ fi
 cd "${TORCHREID_DIR}"
 # Clean any previous build/compile artifacts to prevent conflicts (e.g. from Python upgrades)
 git clean -fdx 2>/dev/null || true
+# Install torchreid's dependencies first to prevent import failures in setup.py
+pip install -r requirements.txt -q
 pip install --no-build-isolation -e . -q
 cd "${SCRIPT_DIR}"
 echo -e "${GREEN}  ✓ torchreid installed${NC}"

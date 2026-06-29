@@ -6,7 +6,7 @@
 #
 # NOTE: torchreid must be installed from source (see setup.sh).
 
-numpy>=1.24.0
+numpy>=1.24.0,<2.0.0
 opencv-python-headless>=4.8.0
 scipy>=1.11.0
 torch>=2.0.0
@@ -14,3 +14,9 @@ torchvision>=0.15.0
 picamera2>=0.3.12
 Cython>=3.0.0
 
+# Hailo platform dependencies (needed because system hailo_platform is symlinked)
+argcomplete
+contextlib2
+future
+netaddr
+netifaces
