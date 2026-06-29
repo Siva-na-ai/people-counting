@@ -89,8 +89,8 @@ source "${VENV_DIR}/bin/activate"
 # Get virtual environment site-packages directory
 VENV_SITE_PACKAGES=$(python3 -c "import site; print(site.getsitepackages()[0])")
 
-# Link system hailo_platform, libcamera, and picamera2 packages if they exist (to avoid using --system-site-packages)
-for p in /usr/lib/python3/dist-packages/*hailo* /usr/lib/python3/dist-packages/*libcamera* /usr/lib/python3/dist-packages/*picamera2*; do
+# Link system hailo_platform, libcamera, picamera2, and videodev2 packages if they exist (to avoid using --system-site-packages)
+for p in /usr/lib/python3/dist-packages/*hailo* /usr/lib/python3/dist-packages/*libcamera* /usr/lib/python3/dist-packages/*picamera2* /usr/lib/python3/dist-packages/*videodev2*; do
     if [ -e "$p" ]; then
         ln -sf "$p" "${VENV_SITE_PACKAGES}/" 2>/dev/null || true
     fi
