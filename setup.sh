@@ -120,6 +120,19 @@ fi
 cd "${TORCHREID_DIR}"
 # Clean any previous build/compile artifacts to prevent conflicts (e.g. from Python upgrades)
 git clean -fdx 2>/dev/null || true
+
+# Patch setup.py for Python 3.13 PEP 667 compatibility
+python3 -c "
+with open('setup.py', 'r') as f:
+    content = f.read()
+target = 'exec(compile(f.read(), version_file, \'exec\'))\n    return locals()[\'__version__\']'
+replacement = 'ns = {}\n        exec(compile(f.read(), version_file, \'exec\'), ns)\n        return ns[\'__version__\']'
+if target in content:
+    with open('setup.py', 'w') as f:
+        f.write(content.replace(target, replacement))
+    print('  ✓ Patched setup.py for Python 3.13 compatibility')
+"
+
 # Install torchreid's dependencies first to prevent import failures in setup.py
 pip install -r requirements.txt -q
 pip install --no-build-isolation -e . -q
